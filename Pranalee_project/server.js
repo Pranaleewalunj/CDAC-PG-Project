@@ -2,11 +2,12 @@ const express = require("express")
 const app = express()
 const cors = require("cors")
 
+const corsOrigin = process.env.CORS_ORIGIN || "http://localhost:5173";
 app.use(cors({
-  origin: "http://localhost:5173",
+  origin: corsOrigin,
   methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
   allowedHeaders: ["Content-Type", "Authorization"]
-}))
+}));
 
 app.use(express.json())
 app.use('/productimages', express.static('productimages'))
@@ -34,6 +35,7 @@ app.use("/api/customer", authorizeCustomer, customerRoute)
 app.use("/api/order", authorizeCustomer, orderRoute)
 app.use("/api/admin/protected", authorizeAdmin, adminRoute)
 
-app.listen(4000, () => {
-  console.log("Server started at port 4000")
-})
+const PORT = process.env.PORT || 4000;
+app.listen(PORT, () => {
+  console.log(`Server started at port ${PORT}`);
+});
